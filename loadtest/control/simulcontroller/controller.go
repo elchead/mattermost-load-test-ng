@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/blang/semver"
 	"github.com/mattermost/mattermost-load-test-ng/defaults"
 	"github.com/mattermost/mattermost-load-test-ng/loadtest/control"
 	"github.com/mattermost/mattermost-load-test-ng/loadtest/user"
@@ -26,7 +27,7 @@ type SimulController struct {
 	disconnectChan chan struct{}   // notifies disconnection to the ws and periodic goroutines
 	connectedFlag  int32           // indicates that the controller is connected
 	wg             *sync.WaitGroup // to keep the track of every goroutine created by the controller
-	serverVersion  string          // stores the current server version
+	serverVersion  semver.Version  // stores the current server version
 }
 
 // New creates and initializes a new SimulController with given parameters.
@@ -54,6 +55,9 @@ func New(id int, user user.User, config *Config, status chan<- control.UserStatu
 	}, nil
 }
 
+// All requests are based in API v4, so the absolute minimum version required is 4.0.0
+var initialVersion = semver.MustParse("4.0.0")
+
 // Run begins performing a set of user actions in a loop.
 // It keeps on doing it until Stop() is invoked.
 // This is also a blocking function, so it is recommended to invoke it
@@ -75,7 +79,28 @@ func (c *SimulController) Run() {
 		close(c.stoppedChan)
 	}()
 
-	c.serverVersion, _ = c.user.Store().ServerVersion()
+	// Init controller's server version
+	serverVersionString, err := c.user.Store().ServerVersion()
+	if err != nil {
+		c.sendFailStatus("server version could not be retrieved")
+		return
+	}
+	serverVersion, err := control.ParseServerVersion(serverVersionString)
+	if err != nil {
+		c.sendFailStatus("server version could not be parsed")
+		return
+	}
+	c.serverVersion = serverVersion
+
+	// Early check that the server is at least at 4.0.0
+	if !c.isVersionSupported(initialVersion) {
+		c.sendFailStatus(fmt.Sprintf(
+			"server version %q is lower than the minimum supported version %q",
+			serverVersion.String(),
+			initialVersion.String(),
+		))
+		return
+	}
 
 	initActions := []userAction{
 		{
@@ -236,19 +261,18 @@ func (c *SimulController) Run() {
 		},
 	}
 
+	// Filter only actions that are available for the current server
+	var availableActions []userAction
+	for _, action := range actions {
+		if c.isVersionSupported(action.minServerVersion) {
+			availableActions = append(availableActions, action)
+		}
+	}
+
 	for {
-		action, err := pickAction(actions)
+		action, err := pickAction(availableActions)
 		if err != nil {
 			panic(fmt.Sprintf("simulcontroller: failed to pick action %s", err.Error()))
-		}
-
-		if action.minServerVersion != "" {
-			supported, err := control.IsVersionSupported(action.minServerVersion, c.serverVersion)
-			if err != nil {
-				c.status <- c.newErrorStatus(err)
-			} else if !supported {
-				continue
-			}
 		}
 
 		if resp := action.run(c.user); resp.Err != nil {
@@ -290,4 +314,8 @@ func (c *SimulController) sendFailStatus(reason string) {
 
 func (c *SimulController) sendStopStatus() {
 	c.status <- control.UserStatus{ControllerId: c.id, User: c.user, Info: "user stopped", Code: control.USER_STATUS_STOPPED}
+}
+
+func (c *SimulController) isVersionSupported(version semver.Version) bool {
+	return version.LTE(c.serverVersion)
 }
