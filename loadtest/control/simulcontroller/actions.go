@@ -762,12 +762,14 @@ func (c *SimulController) createPost(u user.User) control.UserActionResponse {
 		}
 	}
 
-	if rand.Float64() < c.config.PercentUrgentPosts {
-		post.Metadata = &model.PostMetadata{}
-		post.Metadata.Priority = &model.PostPriority{
-			Priority:                model.NewString("urgent"),
-			RequestedAck:            model.NewBool(false),
-			PersistentNotifications: model.NewBool(false),
+	if c.isVersionSupported(semver.MustParse("7.6.0")) {
+		if rand.Float64() < c.config.PercentUrgentPosts {
+			post.Metadata = &model.PostMetadata{}
+			post.Metadata.Priority = &model.PostPriority{
+				Priority:                model.NewString("urgent"),
+				RequestedAck:            model.NewBool(false),
+				PersistentNotifications: model.NewBool(false),
+			}
 		}
 	}
 
