@@ -103,7 +103,7 @@ func (c *SimulController) Run() {
 		return
 	}
 
-	err := c.user.GetClientConfig()
+	err = c.user.GetClientConfig()
 	if err != nil {
 		c.status <- c.newErrorStatus(err)
 	}
