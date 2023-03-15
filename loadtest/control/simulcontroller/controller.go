@@ -28,6 +28,7 @@ type SimulController struct {
 	connectedFlag  int32           // indicates that the controller is connected
 	wg             *sync.WaitGroup // to keep the track of every goroutine created by the controller
 	serverVersion  semver.Version  // stores the current server version
+	isGQLEnabled   bool
 }
 
 // New creates and initializes a new SimulController with given parameters.
@@ -101,6 +102,12 @@ func (c *SimulController) Run() {
 		))
 		return
 	}
+
+	err := c.user.GetClientConfig()
+	if err != nil {
+		c.status <- c.newErrorStatus(err)
+	}
+	c.isGQLEnabled = c.user.Store().ClientConfig()["FeatureFlagGraphQL"] == "true"
 
 	initActions := []userAction{
 		{
