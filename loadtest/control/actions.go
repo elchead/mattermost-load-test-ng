@@ -819,16 +819,16 @@ func ReloadGQL(u user.User) UserActionResponse {
 			}
 		}
 
-		ver, err := u.Store().ServerVersion()
+		serverVersionString, err := u.Store().ServerVersion()
 		if err != nil {
 			return UserActionResponse{Err: NewUserError(err)}
 		}
 
-		ok, err := IsVersionSupported("6.4.0", ver)
+		serverVersion, err := ParseServerVersion(serverVersionString)
 		if err != nil {
 			return UserActionResponse{Err: NewUserError(err)}
 		}
-		if ok {
+		if serverVersion.GTE(semver.MustParse("6.4.0")) {
 			_, err = u.GetChannelsForUser(userId)
 			if err != nil {
 				return UserActionResponse{Err: NewUserError(err)}
