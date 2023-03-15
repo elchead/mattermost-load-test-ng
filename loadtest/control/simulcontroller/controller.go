@@ -56,8 +56,8 @@ func New(id int, user user.User, config *Config, status chan<- control.UserStatu
 	}, nil
 }
 
-// All requests are based in API v4, so the absolute minimum version required is 4.0.0
-var initialVersion = semver.MustParse("4.0.0")
+// This project started on 2019-11-26, when the latest release was 5.17.1
+var initialVersion = semver.MustParse("5.17.1")
 
 // Run begins performing a set of user actions in a loop.
 // It keeps on doing it until Stop() is invoked.
@@ -93,7 +93,7 @@ func (c *SimulController) Run() {
 	}
 	c.serverVersion = serverVersion
 
-	// Early check that the server is at least at 4.0.0
+	// Early check that the server version is greater or equal than the initialVersion
 	if !c.isVersionSupported(initialVersion) {
 		c.sendFailStatus(fmt.Sprintf(
 			"server version %q is lower than the minimum supported version %q",
