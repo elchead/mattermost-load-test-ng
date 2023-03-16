@@ -33,7 +33,7 @@ func TestCoordinatorAPI(t *testing.T) {
 	require.NoError(t, err)
 	// Overwrite the server version to bypass the call to the MM server requesting it,
 	// since there is no MM server running in the tests.
-	ltConfig.UserControllerConfiguration.ServerVersion = "4.0.0"
+	ltConfig.UserControllerConfiguration.ServerVersion = "5.17.1"
 	ltConfig.ConnectionConfiguration.ServerURL = "http://fakesitetotallydoesntexist.com"
 	ltConfig.UsersConfiguration.MaxActiveUsers = 100
 

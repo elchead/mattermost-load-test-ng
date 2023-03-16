@@ -43,7 +43,7 @@ func TestAgentClientConcurrency(t *testing.T) {
 		require.NoError(t, defaults.Set(&ucConfig))
 		// Overwrite the server version to bypass the call to the MM server requesting it,
 		// since there is no MM server running in the tests.
-		ltConfig.UserControllerConfiguration.ServerVersion = "4.0.0"
+		ltConfig.UserControllerConfiguration.ServerVersion = "5.17.1"
 		agent, err := agentClient.New(id, server.URL, nil)
 		require.NoError(t, err)
 		require.NotNil(t, agent)
@@ -202,7 +202,7 @@ func TestCoordClientConcurrency(t *testing.T) {
 		require.NoError(t, defaults.Set(&ltConfig))
 		// Overwrite the server version to bypass the call to the MM server requesting it,
 		// since there is no MM server running in the tests.
-		ltConfig.UserControllerConfiguration.ServerVersion = "4.0.0"
+		ltConfig.UserControllerConfiguration.ServerVersion = "5.17.1"
 		coordConfig.ClusterConfig.Agents[0].Id = coord.Id() + "-agent"
 		coordConfig.ClusterConfig.Agents[0].ApiURL = server.URL
 		_, err := coord.Create(&coordConfig, &ltConfig)
@@ -218,7 +218,7 @@ func TestCoordClientConcurrency(t *testing.T) {
 		require.NoError(t, defaults.Set(&ltConfig))
 		// Overwrite the server version to bypass the call to the MM server requesting it,
 		// since there is no MM server running in the tests.
-		ltConfig.UserControllerConfiguration.ServerVersion = "4.0.0"
+		ltConfig.UserControllerConfiguration.ServerVersion = "5.17.1"
 		coordConfig.ClusterConfig.Agents[0].Id = coord.Id() + "-agent"
 		coordConfig.ClusterConfig.Agents[0].ApiURL = server.URL
 		var success int
