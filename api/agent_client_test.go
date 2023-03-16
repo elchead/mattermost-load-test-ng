@@ -25,7 +25,7 @@ func createAgent(t *testing.T, id, serverURL string) *client.Agent {
 	require.NoError(t, defaults.Set(&ucConfig))
 	// Overwrite the server version to bypass the call to the MM server requesting it,
 	// since there is no MM server running in the tests.
-	ltConfig.UserControllerConfiguration.ServerVersion = "4.0.0"
+	ltConfig.UserControllerConfiguration.ServerVersion = "5.17.1"
 	agent, err := client.New(id, serverURL, nil)
 	require.NoError(t, err)
 	require.NotNil(t, agent)
