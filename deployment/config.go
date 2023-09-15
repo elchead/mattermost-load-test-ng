@@ -56,7 +56,7 @@ type Config struct {
 	// stable release.
 	MattermostDownloadURL string `default:"https://latest.mattermost.com/mattermost-enterprise-linux" validate:"url"`
 	// Path to the Mattermost EE license file.
-	MattermostLicenseFile string `default:"" validate:"file"`
+	MattermostLicenseFile string `default:""`
 	// Optional path to a partial Mattermost config file to be applied as patch during
 	// app server deployment.
 	MattermostConfigPatchFile string `default:""`

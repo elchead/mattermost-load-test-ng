@@ -30,17 +30,17 @@ func getErrorsInfo(helper *prometheus.Helper, startTime time.Time) (map[string]i
 		description string
 		query       string
 	}{
-		{
-			"Timeouts",
-			fmt.Sprintf("sum(increase(loadtest_http_timeouts_total[%ds]))", timeRange),
-		},
+		//{
+		//	"Timeouts",
+		//	fmt.Sprintf("sum(increase(loadtest_http_timeouts_total[%ds]))", timeRange),
+		//},
 		{
 			"HTTP 5xx",
-			fmt.Sprintf("sum(increase(loadtest_http_errors_total{status_code=~\"5..\"}[%ds]))", timeRange),
+			fmt.Sprintf("sum(increase(mattermost_api_time_count{status_code=~\"5..\"}[%ds]))", timeRange),
 		},
 		{
 			"HTTP 4xx",
-			fmt.Sprintf("sum(increase(loadtest_http_errors_total{status_code=~\"4..\"}[%ds]))", timeRange),
+			fmt.Sprintf("sum(increase(mattermost_api_time_count{status_code=~\"4..\"}[%ds]))", timeRange),
 		},
 	}
 
@@ -131,12 +131,12 @@ func RunLoadTestStatusCmdF(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	tfOutput, err := t.Output()
-	if err != nil {
-		return err
-	}
+	//tfOutput, err := t.Output()
+	//if err != nil {
+	//	return err
+	//}
 
-	prometheusURL := fmt.Sprintf("http://%s:9090", tfOutput.MetricsServer.PublicIP)
+	prometheusURL := fmt.Sprintf("http://%s:9090", "34.89.3.213") // tfOutput.MetricsServer.PublicIP)
 	helper, err := prometheus.NewHelper(prometheusURL)
 	if err != nil {
 		return fmt.Errorf("failed to create prometheus.Helper: %w", err)
