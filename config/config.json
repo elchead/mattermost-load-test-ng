@@ -1,0 +1,64 @@
+{
+  "ConnectionConfiguration": {
+    "ServerURL": "http://34.142.68.139",
+    "WebSocketURL": "ws://34.142.68.139",
+    "AdminEmail": "as@edgeless.systems",
+    "AdminPassword": "ickebins"
+  },
+  "UserControllerConfiguration": {
+    "Type": "simulative",
+    "RatesDistribution": [
+      {
+        "Rate": 1.0,
+        "Percentage": 0.05
+      },
+      {
+        "Rate": 2.0,
+        "Percentage": 0.1
+      },
+      {
+        "Rate": 3.0,
+        "Percentage": 0.15
+      },
+      {
+        "Rate": 6.0,
+        "Percentage": 0.4
+      },
+      {
+        "Rate": 30.0,
+        "Percentage": 0.3
+      }
+    ],
+    "ServerVersion": ""
+  },
+  "InstanceConfiguration": {
+    "NumTeams": 2,
+    "NumChannels": 20,
+    "NumPosts": 40,
+    "NumReactions": 40,
+    "NumAdmins": 0,
+    "PercentReplies": 0.5,
+    "PercentRepliesInLongThreads": 0.05,
+    "PercentUrgentPosts": 0.001,
+    "PercentPublicChannels": 0.2,
+    "PercentPrivateChannels": 0.1,
+    "PercentDirectChannels": 0.6,
+    "PercentGroupChannels": 0.1
+  },
+  "UsersConfiguration": {
+    "InitialActiveUsers": 300,
+    "UsersFilePath": "",
+    "MaxActiveUsers": 3000,
+    "AvgSessionsPerUser": 1
+  },
+  "LogSettings": {
+    "EnableConsole": true,
+    "ConsoleLevel": "ERROR",
+    "ConsoleJson": false,
+    "EnableFile": true,
+    "FileLevel": "INFO",
+    "FileJson": true,
+    "FileLocation": "ltagent.log",
+    "EnableColor": false
+  }
+}
