@@ -9,7 +9,7 @@
     "MaxActiveUsers": 3000
   },
   "MonitorConfig": {
-    "PrometheusURL": "http://34.105.136.244:9090",
+    "PrometheusURL": "http://34.116.168.226:9090",
     "UpdateIntervalMs": 2000,
     "Queries": [
       {

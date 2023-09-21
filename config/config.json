@@ -1,7 +1,7 @@
 {
   "ConnectionConfiguration": {
-    "ServerURL": "http://34.142.68.139",
-    "WebSocketURL": "ws://34.142.68.139",
+    "ServerURL": "http://34.116.220.170",
+    "WebSocketURL": "ws://34.116.220.170",
     "AdminEmail": "as@edgeless.systems",
     "AdminPassword": "ickebins"
   },
